@@ -1,11 +1,12 @@
 #include <stdio.h>
 
+//prototipo
 FILE* fileOpen(char[],char[]);
 
 int main(){
 
     FILE *fp1,*fp2,*fp3;
-    char file1[50],file2[50],target[]="destino.txt";
+    char file1[50],file2[50],target[]="target.txt";
 
     printf("Informe o nome dos dois aquivos: ");
     scanf("%s %s",file1,file2);
@@ -18,11 +19,21 @@ int main(){
         fputc(fgetc(fp1),fp3);
     }
 
-    fseek(fp3, -1, SEEK_CUR);
+    int pos = ftell(fp3) - 1;
+    printf("POS: %d",pos);
 
+    fseek(fp3, 0, SEEK_END); //leva para o inicio
+    //fseek(fp3, 10, SEEK_SET); //leva para o inicio
+    char ch;
     while(feof(fp2)==0){
-        fputc(fgetc(fp2),fp3);
+        if((ch = fgetc(fp2))!=EOF)
+            fputc(ch,fp3);
     }
+
+    fseek(fp3, pos, SEEK_SET);
+
+    fputc('W',fp3);
+
     fclose(fp1);
     fclose(fp2);
     fclose(fp3);
